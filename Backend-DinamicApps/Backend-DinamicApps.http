@@ -1,0 +1,6 @@
+@Backend_DinamicApps_HostAddress = http://localhost:5005
+
+GET {{Backend_DinamicApps_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
