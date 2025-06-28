@@ -82,8 +82,8 @@ BEGIN
 END
 GO
 
--- Procedimiento: ReservarCita
-CREATE PROCEDURE ReservarCita
+-- Procedimiento: ReservarCita actualizado
+ALTER PROCEDURE [dbo].[ReservarCita]
     @citaId INT,
     @pacienteId INT
 AS
@@ -91,10 +91,25 @@ BEGIN
     UPDATE Cita
     SET estado = 'Reservada', idpaciente = @pacienteId
     WHERE id = @citaId AND estado = 'Disponible';
-    
+
     IF @@ROWCOUNT = 1
-        SELECT 1 AS Exito;
+    BEGIN
+        SELECT 
+            1 AS Exito,
+            p.nombres + ' ' + p.apellidos AS Paciente,
+            FORMAT(c.fechahora, 'dddd, dd ''de'' MMMM ''de'' yyyy', 'es-ES') AS Fecha,
+            FORMAT(c.fechahora, 'hh:mm tt', 'es-ES') AS Hora,
+            c.especialidad AS Especialidad,
+            m.nombre AS Profesional,
+            '57' + p.telefono AS Numero
+        FROM Cita c
+        INNER JOIN Paciente p ON c.idpaciente = p.id
+        INNER JOIN Medico m ON c.idmedico = m.id
+        WHERE c.id = @citaId;
+    END
     ELSE
-        SELECT 0 AS Exito;
+    BEGIN
+        SELECT 0 AS Exito, NULL AS Paciente, NULL AS Fecha, NULL AS Hora, NULL AS Especialidad, NULL AS Profesional, NULL AS Numero;
+    END
 END
 GO
