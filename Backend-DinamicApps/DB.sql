@@ -82,8 +82,8 @@ BEGIN
 END
 GO
 
--- Procedimiento: ReservarCita actualizado
-ALTER PROCEDURE [dbo].[ReservarCita]
+-- Procedimiento: ReservarCita
+CREATE PROCEDURE ReservarCita
     @citaId INT,
     @pacienteId INT
 AS
